@@ -238,93 +238,114 @@
   <div class="container">
     <header>
       <h1>AI-Guided Web Deployer</h1>
-      <p class="subtitle">A master blueprint designed for your AI assistant to build, initialize, and deploy your custom static website on GitHub Pages.</p>
+      <p class="subtitle">A master blueprint designed for your AI assistant to locate, prepare, and deploy your existing website on GitHub Pages.</p>
     </header>
 
     <!-- SYSTEM META INSTRUCTIONS FOR THE LLM -->
     <div class="instruction-card" style="border: 1px solid rgba(168, 85, 247, 0.6);">
       <h2>🤖 System Instruction for the AI Assistant</h2>
-      <p><strong>Dear AI Assistant:</strong> You are guiding a non-technical user. Your goal is to execute or walk the user through these steps to successfully set up a static website. If you have terminal access, you can run these commands directly after explaining them, or guide the user in running them.</p>
+      <p><strong>Dear AI Assistant:</strong> You are helping a non-technical user set up and publish their existing website on GitHub. Your goal is to guide them step-by-step or use your tool access to perform these steps for them. Proceed sequentially, validating each phase before moving forward.</p>
       <div class="ai-note">
         <strong>Execution Plan:</strong><br>
-        1. Check and install prerequisites (Brew, Git, GitHub CLI).<br>
-        2. Create a clean project directory and generate a stunning web page.<br>
-        3. Set up Git, commit, and create a public GitHub repository.<br>
-        4. Enable GitHub Pages and configure DNS for their custom domain.
+        1. Guide the user to register an account at <a href="https://github.com/signup" target="_blank" style="color: #60a5fa;">github.com/signup</a>.<br>
+        2. Verify and install CLI prerequisites (Homebrew, Git, GitHub CLI).<br>
+        3. Search the user's filesystem to locate their existing web files. Create the project folder at <code>~/projects/cc/website</code> and copy the files there. Rename the main entrypoint file to <code>index.html</code>.<br>
+        4. Initialize a Git repository, commit all files, and push to a new public GitHub repository.<br>
+        5. Enable GitHub Pages and configure the custom Apex domain.
       </div>
     </div>
 
-    <!-- STEP 1 -->
+    <!-- PHASE 1 -->
     <div class="instruction-card">
-      <h2><span class="step-number">1</span> Install & Verify Prerequisites</h2>
-      <p>Ensure that Homebrew, Git, and the GitHub CLI are installed. On macOS, run the following commands:</p>
-      <pre><code># Check for Homebrew, install if missing
-which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      <h2><span class="step-number">1</span> Create a GitHub Account</h2>
+      <p>Before starting, you need a free GitHub account to host your website. If you don't have one:</p>
+      <ul>
+        <li>Go to <a href="https://github.com/signup" target="_blank" style="color: #60a5fa; text-decoration: underline;">github.com/signup</a> and follow the instructions to create your account.</li>
+        <li>Remember your username and email address, as you'll need them in the following steps.</li>
+      </ul>
+      <div class="ai-note">
+        <strong>AI Action:</strong> Pause and ask the user if they have created an account. Confirm their GitHub username to proceed.
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="instruction-card">
+      <h2><span class="step-number">2</span> Install & Verify Prerequisites</h2>
+      <p>We need to make sure you have the required tools installed on your Mac: <strong>Git</strong> (version control) and the <strong>GitHub CLI</strong> (interact with GitHub from the terminal).</p>
+      <pre><code># Install Homebrew (if not already installed)
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 # Install Git and GitHub CLI
 brew install git gh</code></pre>
       <div class="ai-note">
-        <strong>AI Action:</strong> Run these commands if permitted, or prompt the user to run them in their terminal. Verify installation with <code>git --version</code> and <code>gh --version</code>.
+        <strong>AI Action:</strong> If you have terminal access, verify if <code>git</code> and <code>gh</code> are already installed. If not, run these commands with the user's consent.
       </div>
     </div>
 
-    <!-- STEP 2 -->
+    <!-- PHASE 3 -->
     <div class="instruction-card">
-      <h2><span class="step-number">2</span> Initialize Project & Create Assets</h2>
-      <p>Create a project directory, generate a modern index.html, and download or generate a custom image/logo (e.g. <code>hero.png</code>).</p>
-      <pre><code># Create project directory and navigate into it
-mkdir my-website && cd my-website
-
-# Create your asset folder
-mkdir assets</code></pre>
+      <h2><span class="step-number">3</span> Locate & Prepare Website Files</h2>
+      <p>Now, let's locate your existing website files on your computer. We will create a fresh directory at <code>~/projects/cc/website</code> and move your website files there.</p>
       <div class="ai-note">
-        <strong>AI Action:</strong> Create a beautiful, responsive, and modern HTML/CSS page tailored to the user's needs. Use your image generation tool to create a high-quality <code>hero.png</code> image asset and place it inside the project folder. Ensure all local paths are relative (e.g., <code>src="assets/hero.png"</code>).
+        <strong>AI Action:</strong>
+        <ol>
+          <li>Search the user's home directory (Documents, Desktop, Downloads, etc.) for existing HTML, CSS, or JS files.</li>
+          <li>Once found, create the directory <code>~/projects/cc/website</code>:
+            <pre style="margin: 0.5rem 0;"><code>mkdir -p ~/projects/cc/website</code></pre>
+          </li>
+          <li>Copy all the existing website files and assets into this directory.</li>
+          <li>Identify the main homepage file (e.g., <code>home.html</code>, <code>welcome.html</code>, etc.). Rename it to exactly <code>index.html</code> so GitHub Pages can recognize it.
+            <pre style="margin: 0.5rem 0;"><code>mv ~/projects/cc/website/your_old_main_file.html ~/projects/cc/website/index.html</code></pre>
+          </li>
+        </ol>
       </div>
     </div>
 
-    <!-- STEP 3 -->
+    <!-- PHASE 4 -->
     <div class="instruction-card">
-      <h2><span class="step-number">3</span> Initialize Git & Commit</h2>
-      <p>Initialize a Git repository and commit the newly created files to track changes.</p>
-      <pre><code>git init
+      <h2><span class="step-number">4</span> Initialize Git & Commit</h2>
+      <p>Initialize a local Git repository in your new project folder and add all the files.</p>
+      <pre><code>cd ~/projects/cc/website
+git init
+git branch -M main
 git add .
-git commit -m "Initial commit - website setup"</code></pre>
+git commit -m "initial commit"</code></pre>
       <div class="ai-note">
-        <strong>AI Action:</strong> Run these commands within the user's project directory. Make sure the default branch is named <code>main</code> using <code>git branch -M main</code>.
+        <strong>AI Action:</strong> Execute these commands within the <code>~/projects/cc/website</code> directory. Ensure that all the files are staged and committed properly.
       </div>
     </div>
 
-    <!-- STEP 4 -->
+    <!-- PHASE 5 -->
     <div class="instruction-card">
-      <h2><span class="step-number">4</span> Authenticate and Create GitHub Repo</h2>
-      <p>Authenticate your GitHub account using the GitHub CLI, and create a public repository.</p>
-      <pre><code># Authenticate with GitHub
+      <h2><span class="step-number">5</span> Authenticate & Create GitHub Repo</h2>
+      <p>Log in to your GitHub account via the terminal, and push your local repository to a new public GitHub repository.</p>
+      <pre><code># Log in to your GitHub account
 gh auth login
 
-# Create the repository on GitHub and push local commits
-gh repo create --public --source=. --remote=origin --push</code></pre>
+# Create a new public repository and push your code
+gh repo create website --public --source=. --remote=origin --push</code></pre>
       <div class="ai-note">
-        <strong>AI Action:</strong> Guide the user through the interactive <code>gh auth login</code> prompt if they need to log in. Once authenticated, run the repository creation command.
+        <strong>AI Action:</strong> Guide the user through the interactive <code>gh auth login</code> steps. Once logged in, execute the repository creation and push command.
       </div>
     </div>
 
-    <!-- STEP 5 -->
+    <!-- PHASE 6 -->
     <div class="instruction-card">
-      <h2><span class="step-number">5</span> Enable GitHub Pages</h2>
-      <p>Turn on GitHub Pages for the repository using the GitHub API via the CLI.</p>
-      <pre><code>gh api -X POST /repos/{owner}/{repo}/pages -f "source[branch]=main" -f "source[path]=/"</code></pre>
+      <h2><span class="step-number">6</span> Enable GitHub Pages</h2>
+      <p>Enable GitHub Pages hosting on your newly created repository using the GitHub API.</p>
+      <pre><code>gh api -X POST /repos/{owner}/website/pages -f "source[branch]=main" -f "source[path]=/"</code></pre>
       <div class="ai-note">
-        <strong>AI Action:</strong> Replace <code>{owner}</code> and <code>{repo}</code> with the user's GitHub username and repository name. Run this command to initialize the deployment.
+        <strong>AI Action:</strong> Replace <code>{owner}</code> with the user's GitHub username and execute the command. This will launch your live site under <code>https://{owner}.github.io/website/</code>.
       </div>
     </div>
 
-    <!-- STEP 6 -->
+    <!-- PHASE 7 -->
     <div class="instruction-card">
-      <h2><span class="step-number">6</span> Configure Custom Apex Domain</h2>
-      <p>To point a custom root domain (like <code>yourdomain.com</code>) to your new site, configure your DNS provider and update the GitHub repository.</p>
+      <h2><span class="step-number">7</span> Configure Custom Apex Domain</h2>
+      <p>To point your custom domain (e.g., <code>yourdomain.com</code>) to your newly created website, follow these steps:</p>
       
-      <h3>1. Configure DNS Records</h3>
-      <p>Go to your domain registrar (e.g., GoDaddy, Namecheap) and create four <strong>A Records</strong> pointing to these IP addresses:</p>
+      <h3>1. Configure DNS A Records</h3>
+      <p>Log in to your domain registrar (GoDaddy, Namecheap, etc.) and create four <strong>A Records</strong> pointing to these IP addresses:</p>
       <table class="dns-table">
         <thead>
           <tr>
@@ -358,14 +379,16 @@ gh repo create --public --source=. --remote=origin --push</code></pre>
       </table>
       
       <h3>2. Add CNAME File to Repository</h3>
-      <p>Create a file named <code>CNAME</code> in your project root containing only your domain name, and push it to GitHub:</p>
-      <pre><code>echo "yourdomain.com" > CNAME
+      <p>Create a file named <code>CNAME</code> in your project root, add your domain name to it, and push it to GitHub:</p>
+      <pre><code>cd ~/projects/cc/website
+echo "yourdomain.com" > CNAME
 git add CNAME
 git commit -m "Configure custom domain"
 git push origin main</code></pre>
+
       <div class="ai-note">
-        <strong>AI Action:</strong> Help the user write and commit this file. You can also run the following API request to set the CNAME and enforce HTTPS:
-        <pre style="margin-top: 0.5rem; margin-bottom: 0;"><code>gh api -X PATCH /repos/{owner}/{repo}/pages -f "cname=yourdomain.com" -F "https_enforced=true"</code></pre>
+        <strong>AI Action:</strong> Create and commit the CNAME file. To enforce HTTPS, you can run the following API request:
+        <pre style="margin-top: 0.5rem; margin-bottom: 0;"><code>gh api -X PATCH /repos/{owner}/website/pages -f "cname=yourdomain.com" -F "https_enforced=true"</code></pre>
       </div>
     </div>
   </div>
